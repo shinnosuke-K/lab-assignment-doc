@@ -21,9 +21,9 @@ paths:
           description: Unauthorized
         '500':
           description: Internal Server Error
-      operationId: post-login
+      operationId: login
       parameters: []
-      description: /login
+      description: ログインする
       requestBody:
         content:
           application/json:
@@ -41,27 +41,10 @@ paths:
           description: Unauthorized
         '500':
           description: Internal Server Error
-      operationId: get-logout
+      operationId: logout
       parameters:
         - $ref: '#/components/parameters/Set-Cookie'
-      description: /logout
-  '/graduate/{userId}':
-    parameters:
-      - $ref: '#/components/parameters/userId'
-    get:
-      summary: 進学情報の取得
-      tags: []
-      responses:
-        '200':
-          $ref: '#/components/responses/OK'
-        '401':
-          description: Unauthorized
-        '500':
-          description: Internal Server Error
-      operationId: get-graduate-userId
-      parameters:
-        - $ref: '#/components/parameters/Set-Cookie'
-      description: '/graduate/{userId}'
+      description: ログアウトする
   '/graduate/{userId}/save':
     parameters:
       - $ref: '#/components/parameters/userId'
@@ -75,7 +58,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal Server Error
-      operationId: post-graduate-userId-save
+      operationId: postGraduateSave
       parameters:
         - $ref: '#/components/parameters/Set-Cookie'
       requestBody:
@@ -83,7 +66,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/graduate'
-      description: '/graduate/{userId}/save'
+      description: 進学情報を保存する
   '/graduate/{userId}/fix':
     parameters:
       - $ref: '#/components/parameters/userId'
@@ -97,7 +80,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal Server Error
-      operationId: post-graduate-userId-fix
+      operationId: postGraduateFix
       parameters:
         - $ref: '#/components/parameters/Set-Cookie'
       requestBody:
@@ -105,24 +88,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/graduate'
-      description: '/graduate/{userId}/fix'
-  '/lab/{userId}':
-    parameters:
-      - $ref: '#/components/parameters/userId'
-    get:
-      summary: 研究室調査結果の取得
-      tags: []
-      responses:
-        '200':
-          $ref: '#/components/responses/OK'
-        '401':
-          description: Unauthorized
-        '500':
-          description: Internal Server Error
-      operationId: get-lab-userId
-      parameters:
-        - $ref: '#/components/parameters/Set-Cookie'
-      description: '/lab/{userId}'
+      description: 進学情報を修正する
   '/lab/{userId}/save':
     parameters:
       - $ref: '#/components/parameters/userId'
@@ -136,7 +102,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal Server Error
-      operationId: post-lab-userId-save
+      operationId: postLabSave
       parameters:
         - $ref: '#/components/parameters/Set-Cookie'
       requestBody:
@@ -144,7 +110,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/labs'
-      description: '/lab/{userId}/save'
+      description: 配属情報を保存する
   '/lab/{userId}/fix':
     parameters:
       - $ref: '#/components/parameters/userId'
@@ -158,7 +124,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal Server Error
-      operationId: post-lab-userId-fix
+      operationId: postLabFix
       parameters:
         - $ref: '#/components/parameters/Set-Cookie'
       requestBody:
@@ -166,58 +132,45 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/labs'
-      description: '/lab/{userId}/fix'
+      description: 配属情報を修正する
+  /home:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: getHome
+      description: 回答情報を取得する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/labs'
 components:
   schemas:
     labs:
-      title: labs
+      title: lab
       type: object
-      properties:
-        labs:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-              professors:
-                $ref: '#/components/schemas/professor'
-      examples:
-        - labs:
-            - name: 研究室
-              professors:
-                name: 田中
-                point: '90'
-    professor:
-      title: professor
-      type: object
+      examples: []
       properties:
         name:
           type: string
-          example: 田中
-          readOnly: true
-        point:
-          type: string
-          example: '90'
-          minLength: 0
-          maxLength: 100
-      required:
-        - name
-        - point
+        professors:
+          $ref: '#/components/schemas/professor'
+    professor:
+      title: professor
+      type: object
       examples:
         - name: 田中
           point: '90'
+      properties:
+        name:
+          type: string
+        point:
+          type: integer
     graduate:
       title: graduate
-      type: object
-      properties:
-        graduate:
-          type: boolean
-          description: 進学するかどうか
-      required:
-        - graduate
-      examples:
-        - graduate: true
+      examples: []
+      type: boolean
     user:
       title: user
       type: object
@@ -232,6 +185,24 @@ components:
         password:
           type: string
           example: password
+    home:
+      title: home
+      type: object
+      examples:
+        - user_id: string
+          graduate: true
+          labs:
+            name: string
+            professors:
+              name: 田中
+              point: '90'
+      properties:
+        user_id:
+          type: string
+        graduate:
+          $ref: '#/components/schemas/graduate'
+        labs:
+          $ref: '#/components/schemas/labs'
   responses:
     OK:
       description: Success
