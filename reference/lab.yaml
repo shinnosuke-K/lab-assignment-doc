@@ -1,0 +1,264 @@
+openapi: 3.1.0
+info:
+  title: lab
+  version: '1.0'
+  description: 研究室配属調査API
+  contact: {}
+  license:
+    name: MIT
+    identifier: MIT
+servers:
+  - url: 'http://lab-backend:8080'
+paths:
+  /login:
+    post:
+      summary: ログイン
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      operationId: post-login
+      parameters: []
+      description: /login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+        description: ''
+  /logout:
+    get:
+      summary: ログアウト
+      tags: []
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      operationId: get-logout
+      parameters:
+        - $ref: '#/components/parameters/Set-Cookie'
+      description: /logout
+  '/graduate/{userId}':
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    get:
+      summary: 進学情報の取得
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      operationId: get-graduate-userId
+      parameters:
+        - $ref: '#/components/parameters/Set-Cookie'
+      description: '/graduate/{userId}'
+  '/graduate/{userId}/save':
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    post:
+      summary: 進学情報の保存
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      operationId: post-graduate-userId-save
+      parameters:
+        - $ref: '#/components/parameters/Set-Cookie'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/graduate'
+      description: '/graduate/{userId}/save'
+  '/graduate/{userId}/fix':
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    patch:
+      summary: 進学情報の修正
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      operationId: post-graduate-userId-fix
+      parameters:
+        - $ref: '#/components/parameters/Set-Cookie'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/graduate'
+      description: '/graduate/{userId}/fix'
+  '/lab/{userId}':
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    get:
+      summary: 研究室調査結果の取得
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      operationId: get-lab-userId
+      parameters:
+        - $ref: '#/components/parameters/Set-Cookie'
+      description: '/lab/{userId}'
+  '/lab/{userId}/save':
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    post:
+      summary: 研究室調査結果の保存
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      operationId: post-lab-userId-save
+      parameters:
+        - $ref: '#/components/parameters/Set-Cookie'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/labs'
+      description: '/lab/{userId}/save'
+  '/lab/{userId}/fix':
+    parameters:
+      - $ref: '#/components/parameters/userId'
+    patch:
+      summary: 研究室調査結果の修正
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      operationId: post-lab-userId-fix
+      parameters:
+        - $ref: '#/components/parameters/Set-Cookie'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/labs'
+      description: '/lab/{userId}/fix'
+components:
+  schemas:
+    labs:
+      title: labs
+      type: object
+      properties:
+        labs:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              professors:
+                $ref: '#/components/schemas/professor'
+      examples:
+        - labs:
+            - name: 研究室
+              professors:
+                name: 田中
+                point: '90'
+    professor:
+      title: professor
+      type: object
+      properties:
+        name:
+          type: string
+          example: 田中
+          readOnly: true
+        point:
+          type: string
+          example: '90'
+          minLength: 0
+          maxLength: 100
+      required:
+        - name
+        - point
+      examples:
+        - name: 田中
+          point: '90'
+    graduate:
+      title: graduate
+      type: object
+      properties:
+        graduate:
+          type: boolean
+          description: 進学するかどうか
+      required:
+        - graduate
+      examples:
+        - graduate: true
+    user:
+      title: user
+      type: object
+      description: ログイン情報
+      examples:
+        - user_id: '1316190124'
+          password: password
+      properties:
+        user_id:
+          type: string
+          example: '1316190124'
+        password:
+          type: string
+          example: password
+  responses:
+    OK:
+      description: Success
+      content:
+        application/json:
+          schema: {}
+      headers:
+        Set-Cookie:
+          schema:
+            type: string
+            example: fksd-43jfegljer-dlksjflkasn
+          description: jwtの情報
+  securitySchemes: {}
+  parameters:
+    Set-Cookie:
+      name: Set-Cookie
+      in: header
+      required: false
+      schema:
+        type: string
+        example: JSESSIONID=abcde12345; Path=/; HttpOnly
+      description: jwtの情報を入れる
+    userId:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '1316190124'
+      description: 学籍番号
