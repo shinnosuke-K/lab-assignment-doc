@@ -1,0 +1,169 @@
+openapi: 3.0.1
+info:
+  title: lab
+  version: '1.0'
+  description: 研究室配属調査API
+  contact: {}
+servers:
+  - url: 'http://lab-backend:8080'
+paths:
+  /login:
+    post:
+      summary: ログイン
+      tags: []
+      operationId: login
+      description: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+        description: ''
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /logout:
+    get:
+      summary: ログアウト
+      tags: []
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: logout
+      parameters: []
+      description: ログアウトする
+  /home:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/home'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: getHome
+      description: 回答情報を取得する
+      parameters: []
+      security:
+        - bearer: []
+components:
+  schemas:
+    labs:
+      title: lab
+      type: object
+      properties:
+        name:
+          type: string
+        professors:
+          type: array
+          items:
+            $ref: '#/components/schemas/professor'
+      required:
+        - name
+        - professors
+    professor:
+      title: professor
+      type: object
+      properties:
+        name:
+          type: string
+        point:
+          type: integer
+          format: int64
+      required:
+        - name
+        - point
+    graduate:
+      title: graduate
+      type: boolean
+    user:
+      title: user
+      type: object
+      description: ログイン情報
+      properties:
+        user_id:
+          type: string
+          example: '1316190124'
+        password:
+          type: string
+          example: password
+      required:
+        - user_id
+        - password
+    home:
+      title: home
+      type: object
+      x-examples: {}
+      properties:
+        user_id:
+          type: string
+        graduate:
+          $ref: '#/components/schemas/graduate'
+        labs:
+          type: array
+          items:
+            $ref: '#/components/schemas/labs'
+      required:
+        - user_id
+        - graduate
+        - labs
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int64
+          description: Error code
+        message:
+          type: string
+          description: Error message
+  responses:
+    OK:
+      description: Success
+      content:
+        application/json:
+          schema: {}
+      headers:
+        Set-Cookie:
+          schema:
+            type: string
+            example: fksd-43jfegljer-dlksjflkasn
+          description: jwtの情報
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: basic

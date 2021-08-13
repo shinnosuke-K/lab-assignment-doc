@@ -7,11 +7,11 @@ info:
 servers:
   - url: 'http://lab-backend:8080'
 paths:
-  '/lab/{userId}/save':
+  '/graduate/{userId}/save':
     parameters:
       - $ref: '#/components/parameters/userId'
     post:
-      summary: 研究室調査結果の保存
+      summary: 進学情報の保存
       tags: []
       responses:
         '200':
@@ -26,21 +26,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-      operationId: postLabSave
+      operationId: postGraduateSave
       parameters: []
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/labs'
-      description: 配属情報を保存する
+              $ref: '#/components/schemas/graduate'
+      description: 進学情報を保存する
       security:
         - bearer: []
-  '/lab/{userId}/fix':
+  '/graduate/{userId}/fix':
     parameters:
       - $ref: '#/components/parameters/userId'
     patch:
-      summary: 研究室調査結果の修正
+      summary: 進学情報の修正
       tags: []
       responses:
         '200':
@@ -55,43 +55,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-      operationId: postLabFix
+      operationId: postGraduateFix
       parameters: []
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/labs'
-      description: 配属情報を修正する
+              $ref: '#/components/schemas/graduate'
+      description: 進学情報を修正する
       security:
         - bearer: []
 components:
   schemas:
-    labs:
-      title: lab
-      type: object
-      properties:
-        name:
-          type: string
-        professors:
-          type: array
-          items:
-            $ref: '#/components/schemas/professor'
-      required:
-        - name
-        - professors
-    professor:
-      title: professor
-      type: object
-      properties:
-        name:
-          type: string
-        point:
-          type: integer
-          format: int64
-      required:
-        - name
-        - point
+    graduate:
+      title: graduate
+      type: boolean
     Error:
       required:
         - code
@@ -110,7 +88,12 @@ components:
       content:
         application/json:
           schema: {}
-      headers: {}
+      headers:
+        Set-Cookie:
+          schema:
+            type: string
+            example: fksd-43jfegljer-dlksjflkasn
+          description: jwtの情報
   securitySchemes:
     bearer:
       type: http
