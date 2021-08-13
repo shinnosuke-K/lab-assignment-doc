@@ -1,12 +1,9 @@
-openapi: 3.1.0
+openapi: 3.0.1
 info:
   title: lab
   version: '1.0'
   description: 研究室配属調査API
   contact: {}
-  license:
-    name: MIT
-    identifier: MIT
 servers:
   - url: 'http://lab-backend:8080'
 paths:
@@ -14,6 +11,14 @@ paths:
     post:
       summary: ログイン
       tags: []
+      operationId: login
+      description: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+        description: ''
       responses:
         '200':
           $ref: '#/components/responses/OK'
@@ -21,15 +26,6 @@ paths:
           description: Unauthorized
         '500':
           description: Internal Server Error
-      operationId: login
-      parameters: []
-      description: ログインする
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/user'
-        description: ''
   /logout:
     get:
       summary: ログアウト
@@ -157,34 +153,35 @@ components:
     labs:
       title: lab
       type: object
-      examples: []
       properties:
         name:
           type: string
         professors:
-          $ref: '#/components/schemas/professor'
+          type: array
+          items:
+            $ref: '#/components/schemas/professor'
+      required:
+        - name
+        - professors
     professor:
       title: professor
       type: object
-      examples:
-        - name: 田中
-          point: '90'
       properties:
         name:
           type: string
         point:
           type: integer
+          format: int64
+      required:
+        - name
+        - point
     graduate:
       title: graduate
-      examples: []
       type: boolean
     user:
       title: user
       type: object
       description: ログイン情報
-      examples:
-        - user_id: '1316190124'
-          password: password
       properties:
         user_id:
           type: string
@@ -192,24 +189,26 @@ components:
         password:
           type: string
           example: password
+      required:
+        - user_id
+        - password
     home:
       title: home
       type: object
-      examples:
-        - user_id: string
-          graduate: true
-          labs:
-            name: string
-            professors:
-              name: 田中
-              point: '90'
+      x-examples: {}
       properties:
         user_id:
           type: string
         graduate:
           $ref: '#/components/schemas/graduate'
         labs:
-          $ref: '#/components/schemas/labs'
+          type: array
+          items:
+            $ref: '#/components/schemas/labs'
+      required:
+        - user_id
+        - graduate
+        - labs
   responses:
     OK:
       description: Success
