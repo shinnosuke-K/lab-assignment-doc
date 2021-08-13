@@ -63,6 +63,8 @@ paths:
             schema:
               $ref: '#/components/schemas/graduate'
       description: 進学情報を保存する
+      security:
+        - bearer: []
   '/graduate/{userId}/fix':
     parameters:
       - $ref: '#/components/parameters/userId'
@@ -85,6 +87,8 @@ paths:
             schema:
               $ref: '#/components/schemas/graduate'
       description: 進学情報を修正する
+      security:
+        - bearer: []
   '/lab/{userId}/save':
     parameters:
       - $ref: '#/components/parameters/userId'
@@ -107,6 +111,8 @@ paths:
             schema:
               $ref: '#/components/schemas/labs'
       description: 配属情報を保存する
+      security:
+        - bearer: []
   '/lab/{userId}/fix':
     parameters:
       - $ref: '#/components/parameters/userId'
@@ -129,6 +135,8 @@ paths:
             schema:
               $ref: '#/components/schemas/labs'
       description: 配属情報を修正する
+      security:
+        - bearer: []
   /home:
     get:
       summary: Your GET endpoint
@@ -148,6 +156,8 @@ paths:
       description: 回答情報を取得する
       parameters:
         - $ref: '#/components/parameters/Set-Cookie'
+      security:
+        - bearer: []
 components:
   schemas:
     labs:
@@ -221,7 +231,10 @@ components:
             type: string
             example: fksd-43jfegljer-dlksjflkasn
           description: jwtの情報
-  securitySchemes: {}
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: basic
   parameters:
     Set-Cookie:
       name: Set-Cookie
