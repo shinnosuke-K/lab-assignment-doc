@@ -38,8 +38,7 @@ paths:
         '500':
           description: Internal Server Error
       operationId: logout
-      parameters:
-        - $ref: '#/components/parameters/Set-Cookie'
+      parameters: []
       description: ログアウトする
   '/graduate/{userId}/save':
     parameters:
@@ -55,8 +54,7 @@ paths:
         '500':
           description: Internal Server Error
       operationId: postGraduateSave
-      parameters:
-        - $ref: '#/components/parameters/Set-Cookie'
+      parameters: []
       requestBody:
         content:
           application/json:
@@ -79,8 +77,7 @@ paths:
         '500':
           description: Internal Server Error
       operationId: postGraduateFix
-      parameters:
-        - $ref: '#/components/parameters/Set-Cookie'
+      parameters: []
       requestBody:
         content:
           application/json:
@@ -103,8 +100,7 @@ paths:
         '500':
           description: Internal Server Error
       operationId: postLabSave
-      parameters:
-        - $ref: '#/components/parameters/Set-Cookie'
+      parameters: []
       requestBody:
         content:
           application/json:
@@ -127,8 +123,7 @@ paths:
         '500':
           description: Internal Server Error
       operationId: postLabFix
-      parameters:
-        - $ref: '#/components/parameters/Set-Cookie'
+      parameters: []
       requestBody:
         content:
           application/json:
@@ -154,8 +149,7 @@ paths:
           description: Internal Server Error
       operationId: getHome
       description: 回答情報を取得する
-      parameters:
-        - $ref: '#/components/parameters/Set-Cookie'
+      parameters: []
       security:
         - bearer: []
 components:
